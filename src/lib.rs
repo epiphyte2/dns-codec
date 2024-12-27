@@ -154,7 +154,7 @@ mod tests {
 
     #[test]
     fn can_encode_and_decode_all_1_byte_values() {
-        for i in 0u8..255u8 {
+        for i in 0u8..=255u8 {
             validate_encoding(&vec![i]);
         }
     }
