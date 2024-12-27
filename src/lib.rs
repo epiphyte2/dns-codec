@@ -207,4 +207,38 @@ mod tests {
             }
         }
     }
+
+    #[test]
+    fn can_decode_and_reencode_max_len_short_labels() {
+        for s in [
+            "a.", "b.", "c.", "d.", "e.", "f.", "g.", "h.", "i.", "j.", "k.", "l.", "m.", "n.",
+            "o.", "p.", "q.", "r.", "s.", "t.", "u.", "v.", "w.", "x.", "y.", "z.",
+        ] {
+            let mut encoded = String::from(s.repeat(124).strip_suffix(".").unwrap());
+            encoded.push('a');
+            let decoded = decode_string(&encoded).unwrap();
+            assert!(
+                decoded.len() >= 152,
+                "{encoded} => {decoded:?} ({})",
+                decoded.len()
+            );
+            let reencoded = encode_string(&decoded);
+            if encoded.starts_with("b") {
+                assert_eq!(encoded, reencoded);
+                assert_eq!(decoded.len(), 153);
+            } else {
+                assert_ne!(encoded, reencoded);
+            }
+            let redecoded = decode_string(&reencoded).unwrap();
+            assert_eq!(
+                decoded, redecoded,
+                "{encoded} => {decoded:?} => {reencoded} => {redecoded:?}"
+            );
+            assert!(
+                reencoded.len() <= 248,
+                "{encoded} => {decoded:?} => {reencoded} ({})",
+                reencoded.len()
+            );
+        }
+    }
 }
