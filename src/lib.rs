@@ -32,7 +32,7 @@ pub enum CodecError {
 }
 
 fn encode(data: &[u8]) -> Vec<u8> {
-    let mut value = BigUint::from_bytes_be(data);
+    let mut value = BigUint::from_bytes_le(data);
     value |= BigUint::from(1u8) << data.len() * 8;
     let mut result = Vec::new();
     let mut radix = RADIX_BEGIN;
@@ -89,8 +89,8 @@ pub fn decode(data: &[u8]) -> Result<Vec<u8>, CodecError> {
         value += REVERSE[data[idx] as usize];
         radix = RADIX_ANY;
     }
-    let mut result = value.to_bytes_be();
-    result.remove(0);
+    let mut result = value.to_bytes_le();
+    result.pop();
     Ok(result)
 }
 
