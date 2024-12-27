@@ -69,7 +69,7 @@ pub fn decode(data: &[u8]) -> Result<Vec<u8>, CodecError> {
     if len < 2 {
         return Err(CodecError::InvalidData);
     }
-    if data[len - 1] != FORWARD[0] {
+    if data[len - 1] != b'a' && data[len - 1] != b'A' {
         return Err(CodecError::InvalidData);
     }
     let mut value = BigUint::ZERO;
@@ -108,6 +108,10 @@ mod tests {
         let encoded = encode_string(&value);
         let decoded = decode_string(&encoded).unwrap();
         assert_eq!(value, decoded, "{value:?} => {encoded} => {decoded:?}");
+
+        let upper = encoded.to_uppercase();
+        let decoded = decode_string(&upper).unwrap();
+        assert_eq!(value, decoded, "{value:?} => {upper} => {decoded:?}");
 
         let mut prev = '.';
         let mut len = 0;
