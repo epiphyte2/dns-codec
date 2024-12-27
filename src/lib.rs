@@ -108,6 +108,12 @@ mod tests {
         let encoded = encode_string(&value);
         let decoded = decode_string(&encoded).unwrap();
         assert_eq!(value, decoded, "{value:?} => {encoded} => {decoded:?}");
+        assert!(
+            encoded.len() <= 248,
+            "encoded length exceeds 248: {value:?} ({}) => {encoded} ({})",
+            value.len(),
+            encoded.len()
+        );
 
         let upper = encoded.to_uppercase();
         let decoded = decode_string(&upper).unwrap();
@@ -178,9 +184,27 @@ mod tests {
     #[test]
     fn can_encode_and_decode_100k_random_values() {
         for _ in 0..100_000 {
-            let len = thread_rng().gen_range(3..182);
+            let len = thread_rng().gen_range(3..159);
             let value: Vec<u8> = thread_rng().sample_iter(Standard).take(len).collect();
             validate_encoding(&value);
+        }
+    }
+
+    #[test]
+    fn can_encode_and_decode_100k_max_len_random_values() {
+        for _ in 0..100_000 {
+            let value: Vec<u8> = thread_rng().sample_iter(Standard).take(158).collect();
+            validate_encoding(&value);
+        }
+    }
+
+    #[test]
+    fn can_encode_and_decode_all_scaled_unit_vectors() {
+        for len in 3..160 {
+            for value in 0u8..=255u8 {
+                let data = vec![value; len];
+                validate_encoding(&data);
+            }
         }
     }
 }
