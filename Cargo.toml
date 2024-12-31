@@ -2,6 +2,14 @@
 name = "dns-codec"
 version = "0.1.0"
 edition = "2021"
+license = "GPL-3.0"
+authors = ["Edwin Peer <edwin@epiphyte2.co>"]
+readme = "README.md"
+description = "represent arbirary data as legal DNS names using a mostly base-38 encoding (including '.' and '-' where permitted)."
+documentation = "https://docs.rs/dns-codec"
+repository = "https://github.com/epiphyte2/dns-codec"
+keywords = ["encode", "decode", "base38", "dns"]
+categories = ["encoding"]
 
 [dependencies]
 num-bigint = "0.4"
