@@ -1,3 +1,5 @@
+// dns-codec - Copyright (C) 2024 Edwin Peer
+// SPDX-License-Identifier: GPL-3.0-or-later
 use num_bigint::BigUint;
 use thiserror::Error;
 
